@@ -606,15 +606,15 @@
 </head>
 <body>
     <!-- Background Music -->
-    <audio id="backgroundMusic" loop preload="auto">
+    <audio id="backgroundMusic" loop preload="auto" autoplay muted>
         <!-- Bridgerton-style Classical Music -->
         <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
         <!-- Classical string quartet -->
         <source src="https://www.bensound.com/bensound-music/bensound-memories.mp3" type="audio/mpeg">
         <!-- Elegant chamber music -->
         <source src="https://archive.org/download/J.S.Bach-WellTemperedClavier/01-Bach-WTC1-Fugue-01-C-major-BWV846.mp3" type="audio/mpeg">
-        <!-- Fallback orchestral -->
-        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
+        <!-- Fallback - simple test audio -->
+        <source src="https://actions.google.com/sounds/v1/alarms/medium_bell_ringing_near.ogg" type="audio/ogg">
     </audio>
 
     <!-- Music Control Button -->
@@ -725,6 +725,38 @@
         // Set initial volume
         backgroundMusic.volume = 0.4;
 
+        // Set initial icon to play (will change to pause when music starts)
+        musicIcon.className = 'fas fa-music';
+
+        // Simple auto-play setup
+        setTimeout(() => {
+            // Unmute and start after page loads
+            backgroundMusic.muted = false;
+            backgroundMusic.volume = 0.4;
+            
+            if (!backgroundMusic.paused) {
+                isPlaying = true;
+                musicIcon.className = 'fas fa-pause';
+                musicControl.classList.add('playing');
+                musicControl.classList.remove('muted');
+                console.log('Music auto-started successfully');
+            } else {
+                // Try to play if not already playing
+                backgroundMusic.play().then(() => {
+                    isPlaying = true;
+                    musicIcon.className = 'fas fa-pause';
+                    musicControl.classList.add('playing');
+                    musicControl.classList.remove('muted');
+                    console.log('Music started on page load');
+                }).catch((error) => {
+                    console.log('Auto-play blocked:', error);
+                    musicIcon.className = 'fas fa-music';
+                    musicControl.classList.remove('playing');
+                    isPlaying = false;
+                });
+            }
+        }, 2000);
+
         // Add error handling for audio loading
         backgroundMusic.addEventListener('loadstart', () => {
             console.log('Audio loading started...');
@@ -736,29 +768,48 @@
 
         backgroundMusic.addEventListener('error', (e) => {
             console.error('Audio error:', e);
-            // Try to create a simple beep sound as fallback
-            createFallbackSound();
+            // Reset to music icon if error
+            musicIcon.className = 'fas fa-music';
+            musicControl.classList.remove('playing');
         });
 
-        // Fallback sound creation
-        function createFallbackSound() {
+        // Function to start music automatically
+        async function startMusic() {
             try {
-                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                const oscillator = audioContext.createOscillator();
-                const gainNode = audioContext.createGain();
-                
-                oscillator.connect(gainNode);
-                gainNode.connect(audioContext.destination);
-                
-                oscillator.frequency.setValueAtTime(440, audioContext.currentTime);
-                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
-                
-                oscillator.start();
-                oscillator.stop(audioContext.currentTime + 0.5);
-            } catch (e) {
-                console.log('Web Audio API not supported');
+                await backgroundMusic.play();
+                isPlaying = true;
+                musicIcon.className = 'fas fa-pause';
+                musicControl.classList.add('playing');
+                musicControl.classList.remove('muted');
+                console.log('Music auto-started successfully');
+            } catch (error) {
+                console.log('Auto-play blocked by browser:', error);
+                // Reset to play icon if auto-play fails
+                musicIcon.className = 'fas fa-music';
+                musicControl.classList.remove('playing');
+                isPlaying = false;
             }
         }
+
+        // Try to start music on first user interaction
+        let userInteracted = false;
+        function tryAutoPlayOnInteraction() {
+            if (!userInteracted && !isPlaying) {
+                userInteracted = true;
+                startMusic();
+                // Remove listeners after first interaction
+                document.removeEventListener('click', tryAutoPlayOnInteraction);
+                document.removeEventListener('mousemove', tryAutoPlayOnInteraction);
+                document.removeEventListener('keydown', tryAutoPlayOnInteraction);
+                document.removeEventListener('touchstart', tryAutoPlayOnInteraction);
+            }
+        }
+
+        // Add interaction listeners for auto-play
+        document.addEventListener('click', tryAutoPlayOnInteraction);
+        document.addEventListener('mousemove', tryAutoPlayOnInteraction);
+        document.addEventListener('keydown', tryAutoPlayOnInteraction);
+        document.addEventListener('touchstart', tryAutoPlayOnInteraction);
 
         musicControl.addEventListener('click', async () => {
             try {
@@ -770,7 +821,6 @@
                     isPlaying = false;
                     console.log('Music paused');
                 } else {
-                    // Test if audio can be played
                     console.log('Attempting to play music...');
                     await backgroundMusic.play();
                     musicIcon.className = 'fas fa-pause';
@@ -781,14 +831,14 @@
                 }
             } catch (error) {
                 console.error('Play failed:', error);
-                alert('Audio playback failed. This may be due to browser restrictions or missing audio files.');
-                
-                // Try fallback sound
-                createFallbackSound();
+                // Reset icon on error
+                musicIcon.className = 'fas fa-music';
+                musicControl.classList.remove('playing');
+                isPlaying = false;
             }
         });
 
-        // Handle music end
+        // Handle music end (for non-looping tracks)
         backgroundMusic.addEventListener('ended', () => {
             musicIcon.className = 'fas fa-music';
             musicControl.classList.remove('playing');
@@ -838,19 +888,23 @@
             alert('Thank you for your interest! Please visit the official website to complete your RSVP.');
         });
 
-        // Calendar Button Action
+        // Calendar Button Action - Microsoft Teams
         document.getElementById('calendarBtn').addEventListener('click', (e) => {
             e.preventDefault();
+            
             const event = {
                 title: 'EPCOMON-2025 GALA',
-                start: '20251209T103000Z',
-                end: '20251209T133000Z',
-                description: 'EPCOMON-2025 Gala Virtual Event',
-                location: 'Virtual Session'
+                startDate: '2025-12-09T10:30:00',
+                endDate: '2025-12-09T13:30:00',
+                description: 'Join us for the exclusive EPCOMON-2025 GALA virtual event featuring elegant presentations and networking opportunities.',
+                location: 'Pure Water University Campus, Benin City'
             };
 
-            const calendarUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(event.title)}&dates=${event.start}/${event.end}&details=${encodeURIComponent(event.description)}&location=${encodeURIComponent(event.location)}`;
-            window.open(calendarUrl, '_blank');
+            // Microsoft Teams Calendar URL format
+            const teamsCalendarUrl = `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(event.title)}&startTime=${encodeURIComponent(event.startDate)}&endTime=${encodeURIComponent(event.endDate)}&content=${encodeURIComponent(event.description)}&attendees=`;
+            
+            console.log('Opening Teams calendar URL:', teamsCalendarUrl);
+            window.open(teamsCalendarUrl, '_blank');
         });
 
         // Initialize
