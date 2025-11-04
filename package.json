@@ -1,0 +1,22 @@
+{
+  "name": "epcomon-gala-2025",
+  "version": "1.0.0",
+  "description": "EPCOMON GALA 2025 - Luxury Event Invitation Website",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve -s . -p $PORT",
+    "build": "echo 'Static site - no build needed'"
+  },
+  "keywords": [
+    "gala",
+    "event",
+    "invitation",
+    "epcomon",
+    "luxury"
+  ],
+  "author": "EPCOMON Team",
+  "license": "MIT",
+  "dependencies": {
+    "serve": "^14.0.0"
+  }
+}
