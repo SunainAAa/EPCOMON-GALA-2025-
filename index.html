@@ -236,6 +236,24 @@
             text-shadow: 0 0 20px rgba(212, 175, 55, 0.5);
             letter-spacing: 8px;
             line-height: 1;
+            position: relative;
+            overflow: hidden;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        .gala-title::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent
+            );
+            animation: shimmer 3s ease-in-out infinite;
         }
 
         /* Event Title */
@@ -246,20 +264,38 @@
             margin-bottom: 3rem;
             font-weight: 700;
             letter-spacing: 3px;
-            text-shadow: 0 0 30px rgba(212, 175, 55, 0.8);
-            background: linear-gradient(45deg, var(--gold-primary), var(--gold-light), var(--gold-primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation: glow 3s ease-in-out infinite alternate;
+            text-shadow: 0 0 30px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.5);
+            background: transparent;
+            position: relative;
+            overflow: visible;
+            animation: glow 2s ease-in-out infinite;
+            padding: 0.5rem 2rem;
+        }
+
+        .event-title::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent
+            );
+            animation: shimmer 3s ease-in-out 1.5s infinite;
+            pointer-events: none;
         }
 
         @keyframes glow {
-            0% { 
-                filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.5));
+            0%, 100% { 
+                filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6));
+                text-shadow: 0 0 30px rgba(212, 175, 55, 0.8), 0 0 60px rgba(212, 175, 55, 0.5);
             }
-            100% { 
-                filter: drop-shadow(0 0 25px rgba(212, 175, 55, 0.9));
+            50% { 
+                filter: drop-shadow(0 0 35px rgba(212, 175, 55, 1));
+                text-shadow: 0 0 40px rgba(212, 175, 55, 1), 0 0 80px rgba(212, 175, 55, 0.8);
             }
         }
 
@@ -557,6 +593,7 @@
             opacity: 0;
             transform: translateY(30px);
             animation: fadeInUp 1s ease forwards;
+            animation-play-state: running;
         }
 
         @keyframes fadeInUp {
@@ -628,11 +665,285 @@
                 font-size: 16px;
             }
         }
+        /* Entrance Splash Screen */
+        .entrance-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--black-primary) 0%, var(--black-secondary) 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .entrance-screen.hidden {
+            opacity: 0 !important;
+            visibility: hidden !important;
+            pointer-events: none !important;
+            display: none !important;
+        }
+
+        .entrance-content {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .entrance-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            color: var(--gold-primary);
+            margin-bottom: 1rem;
+            text-shadow: var(--shadow-gold);
+            animation: fadeInUp 1s ease;
+        }
+
+        .entrance-subtitle {
+            font-size: 1.5rem;
+            color: var(--gold-light);
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease 0.3s both;
+        }
+
+        .entrance-button {
+            background: linear-gradient(135deg, var(--gold-primary) 0%, var(--gold-dark) 100%);
+            color: var(--black-primary);
+            padding: 1.2rem 3rem;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-gold);
+            animation: fadeInUp 1s ease 0.6s both, pulse 2s ease-in-out 1.6s infinite;
+        }
+
+        .entrance-button:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.6);
+        }
+
+        .entrance-icon {
+            display: block;
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: var(--gold-primary);
+            animation: fadeInUp 1s ease 0.15s both, float 3s ease-in-out infinite, glow 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8));
+        }
+
+        /* Floating Golden Particles */
+        .golden-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--gold-primary);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: particleFloat 8s ease-in-out infinite;
+            box-shadow: 0 0 15px var(--gold-primary), 0 0 30px rgba(212, 175, 55, 0.5);
+            z-index: 100;
+        }
+
+        .golden-particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 7s; }
+        .golden-particle:nth-child(2) { left: 20%; animation-delay: 1s; animation-duration: 8s; }
+        .golden-particle:nth-child(3) { left: 30%; animation-delay: 2s; animation-duration: 9s; }
+        .golden-particle:nth-child(4) { left: 40%; animation-delay: 0.5s; animation-duration: 7.5s; }
+        .golden-particle:nth-child(5) { left: 50%; animation-delay: 1.5s; animation-duration: 8.5s; }
+        .golden-particle:nth-child(6) { left: 60%; animation-delay: 2.5s; animation-duration: 9.5s; }
+        .golden-particle:nth-child(7) { left: 70%; animation-delay: 0.8s; animation-duration: 7.8s; }
+        .golden-particle:nth-child(8) { left: 80%; animation-delay: 1.8s; animation-duration: 8.8s; }
+        .golden-particle:nth-child(9) { left: 90%; animation-delay: 2.8s; animation-duration: 9.8s; }
+        .golden-particle:nth-child(10) { left: 15%; animation-delay: 3s; animation-duration: 10s; }
+        .golden-particle:nth-child(11) { left: 25%; animation-delay: 0.3s; animation-duration: 7.3s; }
+        .golden-particle:nth-child(12) { left: 35%; animation-delay: 1.3s; animation-duration: 8.3s; }
+        .golden-particle:nth-child(13) { left: 45%; animation-delay: 2.3s; animation-duration: 9.3s; }
+        .golden-particle:nth-child(14) { left: 55%; animation-delay: 0.7s; animation-duration: 7.7s; }
+        .golden-particle:nth-child(15) { left: 65%; animation-delay: 1.7s; animation-duration: 8.7s; }
+        .golden-particle:nth-child(16) { left: 75%; animation-delay: 2.7s; animation-duration: 9.7s; }
+        .golden-particle:nth-child(17) { left: 85%; animation-delay: 1.2s; animation-duration: 8.2s; }
+        .golden-particle:nth-child(18) { left: 95%; animation-delay: 2.2s; animation-duration: 9.2s; }
+        .golden-particle:nth-child(19) { left: 5%; animation-delay: 3.2s; animation-duration: 10.2s; }
+        .golden-particle:nth-child(20) { left: 12%; animation-delay: 0.9s; animation-duration: 7.9s; }
+
+        /* Ornamental Lines */
+        .entrance-ornament {
+            width: 200px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--gold-primary), transparent);
+            margin: 1.5rem auto;
+            position: relative;
+            animation: expandWidth 1.5s ease 0.8s both;
+        }
+
+        .entrance-ornament::before,
+        .entrance-ornament::after {
+            content: '◆';
+            position: absolute;
+            color: var(--gold-primary);
+            font-size: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .entrance-ornament::before {
+            left: -15px;
+        }
+
+        .entrance-ornament::after {
+            right: -15px;
+        }
+
+        /* Shimmer Effect */
+        .entrance-title::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent
+            );
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        .entrance-title {
+            position: relative;
+            overflow: hidden;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                filter: drop-shadow(0 0 20px rgba(212, 175, 55, 0.8));
+            }
+            50% {
+                filter: drop-shadow(0 0 40px rgba(212, 175, 55, 1));
+            }
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        @keyframes expandWidth {
+            from {
+                width: 0;
+            }
+            to {
+                width: 200px;
+            }
+        }
+
+        @keyframes shimmer {
+            0% {
+                left: -100%;
+            }
+            100% {
+                left: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .entrance-title {
+                font-size: 2.5rem;
+            }
+            .entrance-subtitle {
+                font-size: 1.2rem;
+            }
+            .entrance-button {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+            .entrance-icon {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
+    <!-- Entrance Splash Screen -->
+    <div class="entrance-screen" id="entranceScreen">
+        <!-- Animated Sparkle Rings -->
+        <div class="sparkle-ring sparkle-ring-1"></div>
+        <div class="sparkle-ring sparkle-ring-2"></div>
+        <div class="sparkle-ring sparkle-ring-3"></div>
+        
+        <!-- Floating Golden Particles -->
+        <div class="golden-particle"></div>
+        <div class="golden-particle"></div>
+        <div class="golden-particle"></div>
+        <div class="golden-particle"></div>
+        <div class="golden-particle"></div>
+        <div class="golden-particle"></div>
+        <div class="golden-particle"></div>
+        <div class="golden-particle"></div>
+        <div class="golden-particle"></div>
+        <div class="golden-particle"></div>
+        
+        <div class="entrance-content">
+            <i class="fas fa-crown entrance-icon"></i>
+            <div class="entrance-ornament"></div>
+            <h1 class="entrance-title">EPCOMON GALA 2025</h1>
+            <div class="entrance-ornament"></div>
+            <p class="entrance-subtitle">An Evening of Elegance Awaits</p>
+            <button class="entrance-button" id="enterButton">
+                <i class="fas fa-music"></i> Enter Experience
+            </button>
+        </div>
+    </div>
+
     <!-- Background Music -->
-    <audio id="backgroundMusic" loop preload="auto" autoplay muted>
+    <audio id="backgroundMusic" loop preload="auto">
         <!-- Bridgerton-style Classical Music -->
         <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
         <!-- Classical string quartet -->
@@ -664,11 +975,35 @@
             <div class="sparkle-ring sparkle-ring-2"></div>
             <div class="sparkle-ring sparkle-ring-3"></div>
             
+            <!-- Floating Golden Particles -->
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            <div class="golden-particle"></div>
+            
             <div class="invitation-header fade-in">You Are Invited to the</div>
             
+            <div class="entrance-ornament fade-in"></div>
             <h1 class="gala-title fade-in">EPCOMON</h1>
             
             <h2 class="event-title fade-in">GALA-2025</h2>
+            <div class="entrance-ornament fade-in"></div>
             
             <div class="event-details fade-in">
                 <div class="event-date calligraphic-text">
@@ -941,7 +1276,7 @@
         updateCountdown();
         setInterval(updateCountdown, 1000);
 
-        // Smooth animations on scroll
+        // Smooth animations on scroll - Start animations immediately
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -950,7 +1285,9 @@
             });
         });
 
+        // Start all fade-in animations immediately when page loads
         document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.animationPlayState = 'running';
             observer.observe(el);
         });
 
@@ -992,6 +1329,85 @@
                     ticking = false;
                 });
                 ticking = true;
+            }
+        });
+
+        // Music Control Functionality
+        document.addEventListener('DOMContentLoaded', () => {
+            const backgroundMusic = document.getElementById('backgroundMusic');
+            const musicControl = document.getElementById('musicControl');
+            const musicIcon = document.getElementById('musicIcon');
+            const entranceScreen = document.getElementById('entranceScreen');
+            const enterButton = document.getElementById('enterButton');
+            const loadingScreen = document.getElementById('loading');
+
+            // Hide loading screen on page load
+            window.addEventListener('load', () => {
+                if (loadingScreen) {
+                    loadingScreen.classList.add('hidden');
+                }
+            });
+
+            // Check if elements exist
+            if (!enterButton) {
+                console.error('Enter button not found!');
+                return;
+            }
+
+            console.log('Entrance screen initialized');
+
+            // Handle entrance screen and music start
+            enterButton.addEventListener('click', () => {
+                console.log('Enter button clicked!');
+                
+                // Hide entrance screen
+                if (entranceScreen) {
+                    entranceScreen.classList.add('hidden');
+                    console.log('Entrance screen hidden');
+                }
+                
+                // Make sure loading screen is also hidden
+                if (loadingScreen) {
+                    loadingScreen.classList.add('hidden');
+                }
+                
+                // Start music with sound
+                if (backgroundMusic) {
+                    backgroundMusic.muted = false;
+                    backgroundMusic.volume = 0.3; // Set volume to 30%
+                    backgroundMusic.play()
+                        .then(() => {
+                            // Music started successfully
+                            if (musicControl) {
+                                musicControl.classList.add('playing');
+                                musicIcon.className = 'fas fa-volume-up';
+                            }
+                            console.log('Music started with user interaction');
+                        })
+                        .catch(error => {
+                            console.log('Music play error:', error);
+                        });
+                }
+            });
+
+            // Toggle music on/off when button is clicked
+            if (musicControl) {
+                musicControl.addEventListener('click', () => {
+                    if (backgroundMusic.paused) {
+                        // Play music
+                        backgroundMusic.play();
+                        backgroundMusic.muted = false;
+                        musicControl.classList.add('playing');
+                        musicControl.classList.remove('muted');
+                        musicIcon.className = 'fas fa-volume-up';
+                    } else {
+                        // Pause music
+                        backgroundMusic.pause();
+                        musicControl.classList.remove('playing');
+                        musicControl.classList.add('muted');
+                        musicIcon.className = 'fas fa-volume-mute';
+                    }
+                });
             }
         });
     </script>

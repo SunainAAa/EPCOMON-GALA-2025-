@@ -436,3 +436,82 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+// Music Control Functionality - Wait for DOM to be ready
+document.addEventListener('DOMContentLoaded', () => {
+    const backgroundMusic = document.getElementById('backgroundMusic');
+    const musicControl = document.getElementById('musicControl');
+    const musicIcon = document.getElementById('musicIcon');
+    const entranceScreen = document.getElementById('entranceScreen');
+    const enterButton = document.getElementById('enterButton');
+    const loadingScreen = document.getElementById('loading');
+
+    // Hide loading screen on page load
+    window.addEventListener('load', () => {
+        if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+        }
+    });
+
+    // Check if elements exist
+    if (!enterButton) {
+        console.error('Enter button not found!');
+        return;
+    }
+
+    console.log('Entrance screen initialized');
+
+    // Handle entrance screen and music start
+    enterButton.addEventListener('click', () => {
+        console.log('Enter button clicked!');
+        
+        // Hide entrance screen
+        if (entranceScreen) {
+            entranceScreen.classList.add('hidden');
+            console.log('Entrance screen hidden');
+        }
+        
+        // Make sure loading screen is also hidden
+        if (loadingScreen) {
+            loadingScreen.classList.add('hidden');
+        }
+        
+        // Start music with sound
+        if (backgroundMusic) {
+            backgroundMusic.muted = false;
+            backgroundMusic.volume = 0.3; // Set volume to 30%
+            backgroundMusic.play()
+                .then(() => {
+                    // Music started successfully
+                    if (musicControl) {
+                        musicControl.classList.add('playing');
+                        musicIcon.className = 'fas fa-volume-up';
+                    }
+                    console.log('Music started with user interaction');
+                })
+                .catch(error => {
+                    console.log('Music play error:', error);
+                });
+        }
+    });
+
+    // Toggle music on/off when button is clicked
+    if (musicControl) {
+        musicControl.addEventListener('click', () => {
+            if (backgroundMusic.paused) {
+                // Play music
+                backgroundMusic.play();
+                backgroundMusic.muted = false;
+                musicControl.classList.add('playing');
+                musicControl.classList.remove('muted');
+                musicIcon.className = 'fas fa-volume-up';
+            } else {
+                // Pause music
+                backgroundMusic.pause();
+                musicControl.classList.remove('playing');
+                musicControl.classList.add('muted');
+                musicIcon.className = 'fas fa-volume-mute';
+            }
+        });
+    }
+});
