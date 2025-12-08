@@ -1011,14 +1011,33 @@
                     <span class="elegant-script">and morning's hour at 10:30 beckons...</span>
                 </div>
                 <div class="event-website">https://epcomongala2025.onrender.com</div>
+                
+                <div class="vc-rooms" style="margin-top: 2rem; font-size: 1.1rem; line-height: 1.8;">
+                    <div style="color: var(--gold-primary); font-weight: 600; margin-bottom: 1rem; font-size: 1.3rem;">
+                        <i class="fas fa-map-marker-alt"></i> Venue Details
+                    </div>
+                    <div style="display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap; color: var(--gold-light);">
+                        <div style="text-align: left;">
+                            <strong style="color: var(--gold-primary);">Bangalore:</strong><br>
+                            • MR 04 02<br>
+                            • Floor: 4
+                        </div>
+                        <div style="text-align: left;">
+                            <strong style="color: var(--gold-primary);">Noida:</strong><br>
+                            • Bibhatsa Ras<br>
+                            • Floor: 18
+                        </div>
+                        <div style="text-align: left;">
+                            <strong style="color: var(--gold-primary);">Chennai:</strong><br>
+                            • Shanghai<br>
+                            • Floor: 11
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="action-buttons fade-in">
-                <a href="#" class="btn btn-primary" id="rsvpBtn">
-                    <i class="fas fa-calendar-check"></i>
-                    RSVP Now
-                </a>
-                <a href="#" class="btn" id="calendarBtn">
+                <a href="#" class="btn btn-primary" id="calendarBtn">
                     <i class="fas fa-calendar-plus"></i>
                     Add to Calendar
                 </a>
@@ -1246,30 +1265,27 @@
             }
         }
 
-        // RSVP Button Action
-        document.getElementById('rsvpBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            alert('Thank you for your interest! Please visit the official website to complete your RSVP.');
-        });
-
         // Calendar Button Action - Microsoft Teams
-        document.getElementById('calendarBtn').addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            const event = {
-                title: 'EPCOMON-2025 GALA',
-                startDate: '2025-12-09T10:30:00',
-                endDate: '2025-12-09T11:30:00',
-                description: 'Join us for the exclusive EPCOMON-2025 GALA virtual event',
-                location: 'Pure Water University Campus, Benin City'
-            };
+        const calendarBtn = document.getElementById('calendarBtn');
+        if (calendarBtn) {
+            calendarBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                
+                const event = {
+                    title: 'EPCOMON-2025 GALA',
+                    startDate: '2025-12-09T10:30:00',
+                    endDate: '2025-12-09T11:30:00',
+                    description: 'Join us for the exclusive EPCOMON-2025 GALA virtual event',
+                    location: 'Pure Water University Campus, Benin City'
+                };
 
-            // Microsoft Teams Calendar URL format
-            const teamsCalendarUrl = `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(event.title)}&startTime=${encodeURIComponent(event.startDate)}&endTime=${encodeURIComponent(event.endDate)}&content=${encodeURIComponent(event.description)}&attendees=`;
-            
-            console.log('Opening Teams calendar URL:', teamsCalendarUrl);
-            window.open(teamsCalendarUrl, '_blank');
-        });
+                // Microsoft Teams Calendar URL format
+                const teamsCalendarUrl = `https://teams.microsoft.com/l/meeting/new?subject=${encodeURIComponent(event.title)}&startTime=${encodeURIComponent(event.startDate)}&endTime=${encodeURIComponent(event.endDate)}&content=${encodeURIComponent(event.description)}&attendees=`;
+                
+                console.log('Opening Teams calendar URL:', teamsCalendarUrl);
+                window.open(teamsCalendarUrl, '_blank');
+            });
+        }
 
         // Initialize
         createParticles();
